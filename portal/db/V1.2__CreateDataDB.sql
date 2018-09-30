@@ -1,0 +1,1 @@
+insert into incidents (id,incident_date,incident_date_group,incident_type) values ( nextval('seq_incident_id'), '2018-09-29 21:10:25-05', '2018-09-29 21:10:25-05', 'phishing');

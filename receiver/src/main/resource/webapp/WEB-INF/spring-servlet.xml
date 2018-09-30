@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- DispatcherServlet Context: defines this servlet's request-processing
+        infrastructure -->
+
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <annotation-driven />
+    <context:component-scan base-package="co.com.deiru" />
+
+    <context:property-placeholder location="/WEB-INF/application.properties"/>
+
+    <!-- Resolves views selected for rendering by @Controllers to .jsp resources
+        in the /WEB-INF/views directory -->
+    <beans:bean
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <beans:property name="prefix" value="/WEB-INF/views/" />
+        <beans:property name="suffix" value=".jsp" />
+    </beans:bean>
+
+
+    <beans:bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+    <beans:bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+
+
+
+    <beans:bean name="kafkaTemplate" class="org.springframework.kafka.core.KafkaTemplate">
+
+        <beans:constructor-arg>
+            <beans:bean class="org.springframework.kafka.core.DefaultKafkaProducerFactory">
+                <beans:constructor-arg>
+                    <beans:map>
+                        <beans:entry key="bootstrap.servers" value="${server.kafka.producer.url}" />
+                        <beans:entry key="retries" value="5" />
+                        <beans:entry key="batch.size" value="16384" />
+                        <beans:entry key="linger.ms" value="1" />
+                        <beans:entry key="buffer.memory" value="33554432" />
+                        <beans:entry key="key.serializer"
+                               value="org.apache.kafka.common.serialization.StringSerializer" />
+                        <beans:entry key="value.serializer"
+                               value="org.apache.kafka.common.serialization.StringSerializer" />
+                    </beans:map>
+                </beans:constructor-arg>
+            </beans:bean>
+        </beans:constructor-arg>
+    </beans:bean>
+</beans:beans>
